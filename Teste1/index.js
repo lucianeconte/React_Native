@@ -2,9 +2,10 @@
  * @format
  */
 
+import React from 'react';
 import {AppRegistry} from 'react-native';
-//import App from './src/App';
+import Flex from './src/componentes/Flex';
 import {name as appName} from './app.json';
-import Menu from './src/Menu'
+//import Menu from './src/Menu'
 
-AppRegistry.registerComponent(appName, () => Menu);
+AppRegistry.registerComponent(appName, () => Flex);

@@ -1,12 +1,29 @@
 import React from 'react'
-import { creacteDrawerNavigator } from 'react-navigation'
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import Contador from './componentes/Contador'
 
 import Simples from './componentes/Simples'
 import ParImpar from './componentes/ParImpar'
 import Inverter, { MegaSena } from './componentes/Multi'
+import ValidarProps from './componentes/ValidarProps'
 
-export default creacteDrawerNavigator({
+export default class Menu extends Component {
+    
+    render(){
+        return (
+            <View>
+                
+                
+            </View>
+        )
+    }
+}
+
+
+/*export default createDrawerNavigator({
+    ValidarProps: {
+        screen: () => <ValidarProps ano={18} />
+    },
     Contador: {
         screen: () => <Contador />
     },
@@ -24,4 +41,4 @@ export default creacteDrawerNavigator({
     Simples: {
         screen: () => <Simples texto='Flexível!!!' />
     }
-}, {drawerWidth: 300 })
+}, {drawerWidth: 300 })*/
