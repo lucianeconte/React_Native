@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     Modal
 } from 'react-native'
+import Nivel from '../components/Nivel'
 
 export default props => {
     return (
@@ -17,22 +18,9 @@ export default props => {
                     <Text style={styles.title}>
                         Selecione o Nível
                     </Text>
-                    criar componente para não ter os 3 botões abaixo
-                    <TouchableOpacity
-                        style={[styles.button, styles.bgEasy]}
-                        onPress={() => props.onLevelSelected(0.1)}>
-                        <Text style={styles.buttonLabel}>Fácil</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.button, styles.bgNormal]}
-                        onPress={() => props.onLevelSelected(0.2)}>
-                        <Text style={styles.buttonLabel}>Intermediário</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={[styles.button, styles.bgHard]}
-                        onPress={() => props.onLevelSelected(0.3)}>
-                        <Text style={styles.buttonLabel}>Difícil</Text>
-                    </TouchableOpacity>
+                    <Nivel texto='Fácil' cor='#49b65d' dificuldade={() => props.onLevelSelected(0.1)}/>
+                    <Nivel texto='Intermediário' cor='#2765F7' dificuldade={() => props.onLevelSelected(0.2)}/>
+                    <Nivel texto='Difícil' cor='#F26337' dificuldade={() => props.onLevelSelected(0.3)}/>
                 </View>
             </View>
         </Modal>
