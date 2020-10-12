@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+npm-debug.*
+
+# Realm
+__tests__/databases
+realm-object-server
+.lock
+.management
+
+ios/build
