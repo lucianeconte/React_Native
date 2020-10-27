@@ -66,10 +66,10 @@ export default class Auth extends Component {
                 'Authorization': 'token ' + token
             }
             console.log(headers)
-            /*const me = await axios.get('https://synnax.herokuapp.com/core/me/', {
-                headers: headers
-            })
-            console.log(me)*/
+            // const me = await axios.get('https://synnax.herokuapp.com/core/me/', {
+            //     headers: headers
+            // })
+            // console.log(me)
 
             axios.defaults.headers.common['Authorization'] = `token ${token}`
             // this.props.navigation.navigate('Home', res.data)
@@ -142,6 +142,11 @@ export default class Auth extends Component {
         )
     }
 }
+
+export const isSignedIn = async () => {
+    const token = 'a';
+    return token !== null ? true : false;
+  };
 
 const styles = StyleSheet.create({
     background: {
