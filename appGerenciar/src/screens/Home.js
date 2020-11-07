@@ -23,7 +23,9 @@ import {
 import colors from '../screens/colors';
 import utils from '../services/utils';
 //import Spinner from 'react-native-loading-spinner-overlay';
-//import sesssion from '../../session';
+import axios from 'axios'
+import { TOKEN } from '../variables';
+import session from '../session';
 import {
     NavigatorBox,
     NavigatorContent,
@@ -34,9 +36,6 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import IconF from 'react-native-vector-icons/FontAwesome'
 import IconA from 'react-native-vector-icons/AntDesign'
-
-import axios from 'axios'
-import AsyncStorage from '@react-native-community/async-storage'
 
 class Home extends Component {
     constructor(props) {
@@ -96,82 +95,10 @@ class Home extends Component {
         this.setState({ searchTextParceiro: string });
     };
 
-    tratsArrPerson = data => {
-        if (data == null) {
-            Toast.show({
-                position: 'top',
-                text: 'Nenhum cliente encontrado!',
-                buttonText: 'Ok',
-                duration: 7000,
-            });
-            return [];
-        }
-
-        var arr = [];
-
-        this.setState({
-            listPerson: arr,
-        });
-
-        for (var d = 0; d < data[0].CPF_CNPJ.length; d++) {
-            var person = {};
-            person.cpf_cnpj = data[0].CPF_CNPJ[d];
-            person.id_cliente = data[0].ID_CLIENTE[d];
-            person.nome = data[0].NOME[d];
-            arr.push(person);
-        }
-
-        this.setState({
-            listPerson: arr,
-        });
-
-        return arr;
-    };
-
-    tratsArrItens = async data => {
-        if (data == null) {
-            return [];
-        }
-
-        var arr = await [];
-
-        await this.setState({
-            listItens: [],
-        });
-
-        for (var d = 0; d < data[0].DESCRICAO.length; d++) {
-            var item = {};
-            item.descricao = data[0].DESCRICAO[d];
-            item.desconto = data[0].DESCONTO[d];
-            item.id_identificador = data[0].ID_IDENTIFICADOR[d];
-            item.id_itemprev = data[0].ID_ITEMPREV[d];
-            item.impresso = data[0].IMPRESSO[d];
-            item.item_cancel = data[0].ITEM_CANCEL[d];
-            item.medida = data[0].MEDIDA[d];
-            item.observacao = data[0].OBSERVACAO[d];
-            item.qtd = data[0].QTD[d];
-            item.total = data[0].TOTAL[d];
-            arr.push(item);
-        }
-
-        await this.setState({
-            listItens: arr,
-        });
-
-        return arr;
-    };
-
     fecthParceiros = async () => {
         let string = this.state.searchTextPerson;
 
-        const tokenJson = await AsyncStorage.getItem('token')
-        let token = null
-
-        try {
-            token = JSON.parse(tokenJson)
-        } catch (e) {
-            //tokenJson está inválido
-        }
+        let token = await session.get(TOKEN);
 
         try {
             if (token) {
@@ -515,12 +442,8 @@ class Home extends Component {
     render() {
         const {
             listParceiros,
-            listProduct,
             cliente,
-            numero,
             listItens,
-            totalItens,
-            qtdItens,
             nomeCliente,
             tipo,
         } = this.state;

@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import { ImageBackground, Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native'
 
 import axios from 'axios'
-import AsyncStorage from '@react-native-community/async-storage'
 
 import backgroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
 import AuthInput from '../components/AuthInput'
-import Home from './Home'
+import session from '../session';
+import {TOKEN} from '../variables';
 
 import { server, showError, showSuccess } from '../common'
+import colors from './colors'
 
 const initialState = {
     name: '',
@@ -59,20 +60,19 @@ export default class Auth extends Component {
             })
             const token = res.data.token
             console.log(token)
-            // AsyncStorage.setItem('userData', JSON.stringify(res.data))
-            AsyncStorage.setItem('token', JSON.stringify(token))
 
-            const headers = {
-                'Authorization': 'token ' + token
-            }
-            console.log(headers)
+            await session.set(TOKEN, token);
+
+            // const headers = {
+            //     'Authorization': 'token ' + token
+            // }
+            //console.log(headers)
             // const me = await axios.get('https://synnax.herokuapp.com/core/me/', {
             //     headers: headers
             // })
             // console.log(me)
 
             axios.defaults.headers.common['Authorization'] = `token ${token}`
-            // this.props.navigation.navigate('Home', res.data)
             this.props.navigation.navigate('Home') 
         } catch (e) {
             showError(e)
@@ -93,9 +93,11 @@ export default class Auth extends Component {
         const validForm = validations.reduce((t, a) => t && a) //verificando se todos os elementos do array são verdadeiros, se um resultado for false, o resultado é false
 
         return (
-            <ImageBackground source={backgroundImage}
-                style={styles.background}>
-                <Text style={styles.title}>Gerenciar</Text>
+            // <ImageBackground source={backgroundImage}
+                // />
+            <View style={styles.background}>
+                <Text style={styles.title}>Synnax</Text>
+                {/* <Text style={{fontSize: 14}}>Gerencie seu negócio</Text> */}
                 <View style={styles.formContainer}>
                     <Text style={styles.subtitle}>
                         {this.stageNew ? 'Crie a sua conta' : 'Informe seus dados'}
@@ -138,7 +140,8 @@ export default class Auth extends Component {
                         {this.state.stageNew ? 'Já possui conta?' : 'Ainda não possui conta'}
                     </Text>
                 </TouchableOpacity>
-            </ImageBackground>
+            </View>
+            // {/* </ImageBackground> */}
         )
     }
 }
@@ -157,7 +160,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: commonStyles.fontFamily,
-        color: commonStyles.colors.secondary,
+        color: colors.blue2,
         fontSize: 70,
         marginBottom: 10
     },
@@ -169,7 +172,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     formContainer: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backgroundColor: colors.blue,
         padding: 20,
         width: '90%'
     },
@@ -178,8 +181,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFF',
     },
     button: {
-        backgroundColor: '#080',
-        marginTop: 10,
+        backgroundColor: colors.blue2,
+        marginTop: 20,
         padding: 10,
         alignItems: 'center',
         borderRadius: 7

@@ -41,7 +41,7 @@ export default class detalhesParceiros extends Component {
 
   render() {
     const { parceiro } = this.state;
-    console.log(parceiro)
+    console.log(parceiro.name)
 
     return (
       <Container>
