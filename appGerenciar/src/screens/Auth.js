@@ -3,7 +3,6 @@ import { ImageBackground, Text, StyleSheet, View, TouchableOpacity, Alert } from
 
 import axios from 'axios'
 
-import backgroundImage from '../../assets/imgs/login.jpg'
 import commonStyles from '../commonStyles'
 import AuthInput from '../components/AuthInput'
 import session from '../session';
@@ -174,7 +173,8 @@ const styles = StyleSheet.create({
     formContainer: {
         backgroundColor: colors.blue,
         padding: 20,
-        width: '90%'
+        width: '90%',
+        borderRadius: 20,
     },
     input: {
         marginTop: 10,

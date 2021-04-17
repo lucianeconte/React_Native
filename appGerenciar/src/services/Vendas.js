@@ -1,17 +1,35 @@
-//import { Toast } from 'native-base';
 import session from '../session';
 import { TOKEN } from '../variables';
 import axios from 'axios';
 import { server, showError, showSuccess } from '../common';
 //import Utils from './Utils';
 
-export const createParceiro = async (data) => {
-  console.log(data)
+export const createPedido = async (data) => {
   var token = await session.get(TOKEN);
+  try {
+    const headers = {
+      'authorization': 'token ' + token,
+      'content-type': 'application/json;charset=UTF-8'
+    };
+
+    const res = await axios.post(`${server}/sale/salesorder/`, data, {
+      headers: headers
+    })
+
+    return res.data;
+  } catch (e) {
+    console.log('erro: ' + e)
+    return e;
+  }
+};
+
+export const addProcut = async (data) => {
+  var token = await session.get(TOKEN);
+  console.log(data)
   try {
     var config = {
       method: 'post',
-      url: `${server}/core/businessparters/`,
+      url: `${server}/sale/salesorderitems/`,
       headers: {
         'authorization': 'token ' + token,
         'content-type': 'application/json;charset=UTF-8'
@@ -27,21 +45,21 @@ export const createParceiro = async (data) => {
         console.log(error);
       });
 
-      return true;
+    return true;
   } catch (e) {
     console.log('erro: ' + e)
     return e;
   }
 };
 
-export const deleteClientes = async () => {
+export const deleteItem = async () => {
   try {
-    const realm = await getRealm();
+    //    const realm = await getRealm();
 
-    await realm.write(() => {
-      let itensDb = realm.objects('Clientes');
-      realm.delete(itensDb);
-    });
+    // await realm.write(() => {
+    //   let itensDb = realm.objects('Produtos');
+    //   realm.delete(itensDb);
+    // });
 
     return true;
   } catch (e) {

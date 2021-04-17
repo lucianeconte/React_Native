@@ -1,17 +1,15 @@
-//import { Toast } from 'native-base';
 import session from '../session';
 import { TOKEN } from '../variables';
 import axios from 'axios';
 import { server, showError, showSuccess } from '../common';
 //import Utils from './Utils';
 
-export const createParceiro = async (data) => {
-  console.log(data)
+export const createProduto = async (data) => {
   var token = await session.get(TOKEN);
   try {
     var config = {
       method: 'post',
-      url: `${server}/core/businessparters/`,
+      url: `${server}/core/products/`,
       headers: {
         'authorization': 'token ' + token,
         'content-type': 'application/json;charset=UTF-8'
@@ -34,14 +32,14 @@ export const createParceiro = async (data) => {
   }
 };
 
-export const deleteClientes = async () => {
+export const deleteProdutos = async () => {
   try {
     const realm = await getRealm();
 
-    await realm.write(() => {
-      let itensDb = realm.objects('Clientes');
-      realm.delete(itensDb);
-    });
+    // await realm.write(() => {
+    //   let itensDb = realm.objects('Produtos');
+    //   realm.delete(itensDb);
+    // });
 
     return true;
   } catch (e) {

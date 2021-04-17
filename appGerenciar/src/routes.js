@@ -4,7 +4,11 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 import Home from './screens/Home';
 import Auth from './screens/Auth';
 import detalhesParceiros from './screens/detalhesParceiros';
+import detalhesProdutos from './screens/detalhesProdutos';
 import novoParceiro from './screens/novoParceiro';
+import novoProduto from './screens/novoProduto';
+import novoPedido from './screens/novoPedido';
+import addItem from './screens/addItem';
 
 const DrawerRoutes = createDrawerNavigator(
   {
@@ -36,8 +40,32 @@ export const SignedOutRoutes = createStackNavigator({
       header: null,
     },
   },
+  detalhesProdutos: {
+    screen: detalhesProdutos,
+    navigationOptions: {
+      header: null,
+    },
+  },
   novoParceiro: {
     screen: novoParceiro,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  novoProduto: {
+    screen: novoProduto,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  novoPedido: {
+    screen: novoPedido,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  addItem: {
+    screen: addItem,
     navigationOptions: {
       header: null,
     },
