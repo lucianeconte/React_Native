@@ -52,6 +52,26 @@ export const addProcut = async (data) => {
   }
 };
 
+export const itensOrder = async (data) => {
+  var token = await session.get(TOKEN);
+
+  try {
+    var headers = {
+      'authorization': 'token ' + token,
+      'content-type': 'application/json;charset=UTF-8'
+    };
+
+    const res = await axios.get(`${server}/sale/salesorderitems?order=` + data, {
+      headers: headers
+    })
+
+    return res.data;
+  } catch (e) {
+    console.log('erro: ' + e)
+    return e;
+  }
+};
+
 export const deleteItem = async () => {
   try {
     //    const realm = await getRealm();

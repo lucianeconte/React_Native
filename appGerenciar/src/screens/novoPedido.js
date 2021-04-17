@@ -26,13 +26,13 @@ import { ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colors from './colors';
 //import Spinner from 'react-native-loading-spinner-overlay';
-import { BackHandler, StatusBar } from 'react-native';
+import { BackHandler, StatusBar, Touchable } from 'react-native';
 import utils from '../services/utils';
 import session from '../session';
 import { TOKEN } from '../variables';
 import { server, showError, showSuccess } from '../common';
 import axios from 'axios';
-import { createPedido } from '../services/Vendas';
+import { createPedido, itensOrder } from '../services/Vendas';
 
 class novoPedido extends Component {
     constructor(properties) {
@@ -49,6 +49,7 @@ class novoPedido extends Component {
             notes: '',
             listProduct: [],
             listClientes: [],
+            listItens: [],
             salesorder: 0,
             company: 0,
         };
@@ -82,7 +83,7 @@ class novoPedido extends Component {
         //     },
         //     buttonIndex => {
         //         if (buttonIndex == 1) {
-                    return this.props.navigation.navigate('Home'); //verificar se lançou itens, informar
+        return this.props.navigation.navigate('Home'); //verificar se lançou itens, informar
         //         }
         //     },
         // );
@@ -201,6 +202,36 @@ class novoPedido extends Component {
         }
     };
 
+    fecthItensOrder = async () => {
+        const $this = this;
+        try {
+            await itensOrder(this.state.salesorder).then(function (response) {
+
+                if (response) {
+                    $this.setState({ listItens: response });
+                    return true;
+                }
+
+                Toast.show({
+                    position: 'top',
+                    text: 'Ocorreu um erro ao listar os itens do pedido, tente novamente!',
+                    buttonText: 'Ok',
+                    duration: 5000,
+                });
+            });
+        } catch (e) {
+            this.setState({
+                spinner: false,
+            });
+            Toast.show({
+                position: 'top',
+                text: 'Ocorreu um erro tente novamente!',
+                buttonText: 'Ok',
+                duration: 5000,
+            });
+        }
+    };
+
     salvar = async () => {
         try {
 
@@ -232,8 +263,8 @@ class novoPedido extends Component {
                         buttonText: 'Ok',
                         duration: 5000,
                     });
-                    $this.setState({salesorder: response.id});
-                    $this.setState({company: response.company});
+                    $this.setState({ salesorder: response.id });
+                    $this.setState({ company: response.company });
                     //return $this.props.navigation.navigate('Home'); //ver se consegue selecionar a aba Produtos
                     return true;
                 }
@@ -259,8 +290,8 @@ class novoPedido extends Component {
     };
 
     confirmaCliente = (id) => {
-        this.setState({id_cliente: id});
-        this.setState({listClientes : ''});
+        this.setState({ id_cliente: id });
+        this.setState({ listClientes: '' });
         Toast.show({
             position: 'top',
             text: 'Cliente atribuído ao pedido!',
@@ -343,100 +374,35 @@ class novoPedido extends Component {
     };
 
 
-    /* fazer  consulta dos itens do pedido e armazenar em listItens
-     renderListItem = (item, index) => {
-         const desconto = parseFloat(item.desconto).toFixed(
-             this.state.casasDecimaisPreco,
-         );
-         const observacao = item.observacao;
-         const total = this.state.listItens.length;
- 
-         if (item.item_cancel == 'S') {
-             return (
-                 <CardItem
-                     key={item.id_itemprev + 'listitem'}
-                     style={{ borderRadius: 20, marginTop: 10 }}>
-                     <Text style={{ color: '#d2d3d5' }}>{parseInt(total - index)}</Text>
-                     <Body style={{ marginLeft: 10 }}>
-                         <Text
-                             style={{
-                                 color: '#d2d3d5',
-                                 textDecorationLine: 'line-through',
-                                 textDecorationStyle: 'solid',
-                                 textDecorationColor: '#000',
-                             }}>
-                             {item.descricao}
-                         </Text>
-                         <Text
-                             note
-                             numberOfLines={1}
-                             style={{
-                                 fontSize: 12,
-                                 color: '#d2d3d5',
-                                 textDecorationLine: 'line-through',
-                                 textDecorationStyle: 'solid',
-                                 textDecorationColor: '#000',
-                             }}>
-                             Qtd.{' '}
-                             {utils.numberToReal(item.qtd, this.state.casasDecimaisQuantidade)}{' '}
-                             {item.medida} | R${' '}
-                             {utils.numberToReal(item.total, this.state.casasDecimaisPreco)}
-                         </Text>
-                         {observacao != '' && (
-                             <Text
-                                 note
-                                 numberOfLines={1}
-                                 style={{
-                                     fontSize: 12,
-                                     color: '#d2d3d5',
-                                     textDecorationLine: 'line-through',
-                                     textDecorationStyle: 'solid',
-                                     textDecorationColor: '#000',
-                                 }}>
-                                 Obs.: {observacao}
-                             </Text>
-                         )}
-                     </Body>
-                 </CardItem>
-             );
-         }
-         return (
-             <Touchable onPress={() => this.showAction(item)}>
-                 <CardItem
-                     key={item.id_itemprev + 'listitem'}
-                     style={{ borderRadius: 20, marginTop: 10 }}>
-                     <Text style={{ color: 'gray' }}>{parseInt(total - index)}</Text>
-                     <Body style={{ marginLeft: 10 }}>
-                         <Text style={{ color: colors.orange }}>{item.descricao}</Text>
-                         <Text note numberOfLines={1} style={{ fontSize: 12 }}>
-                             Qtd.{' '}
-                             {utils.numberToReal(item.qtd, this.state.casasDecimaisQuantidade)}{' '}
-                             {item.medida} | R${' '}
-                             {utils.numberToReal(item.total, this.state.casasDecimaisPreco)}
-                             {desconto > 0 && (
-                                 <Text style={{ fontSize: 12, color: 'gray' }}>
-                                     {' '}
-                       | Desc. R${' '}
-                                     {utils.numberToReal(desconto, this.state.casasDecimaisPreco)}
-                                 </Text>
-                             )}
-                         </Text>
-                         {observacao != '' && (
-                             <Text
-                                 note
-                                 numberOfLines={1}
-                                 style={{ fontSize: 12, color: 'gray' }}>
-                                 Obs.: {observacao}
-                             </Text>
-                         )}
-                     </Body>
-                 </CardItem>
-             </Touchable>
-         );
-     };*/
+    renderListItem = (item, index) => {
+
+        const total = this.state.listItens.length;
+        console.log('Total = ' + total)
+
+        return (
+            // <Touchable onPress={() => this.showAction(item)}></Touchable> 
+            <View>
+                <CardItem
+                    key={item.id + 'listitem'}
+                    style={{ borderRadius: 20, marginTop: 10 }}>
+                    <Text style={{ color: 'gray' }}>{parseInt(total - index)}</Text>
+                    <Body style={{ marginLeft: 10 }}>
+                        <Text>{item.product_name}</Text>
+                        <Text note numberOfLines={1} style={{ fontSize: 12 }}>
+                            Qtd.{' '}
+                            {utils.numberToReal(item.quantity, this.state.casasDecimaisQuantidade)}{' '}
+                            {item.unit_measure} | R${' '}
+                            {utils.numberToReal(item.total_value, this.state.casasDecimaisPreco)}
+                        </Text>
+                    </Body>
+                </CardItem>
+            </View>
+            // </Touchable>
+        );
+    };
 
     render() {
-        const { listProduct, listClientes } = this.state;
+        const { listProduct, listClientes, listItens } = this.state;
 
         return (
             <Container style={{ backgroundColor: colors.white }}>
@@ -593,12 +559,13 @@ class novoPedido extends Component {
                             tabStyle={{ backgroundColor: '#fff' }}>
                             <View padder>
                                 <View>
-                                    {/* <ScrollView style={{ marginLeft: 10, marginRight: 10 }}>
+                                    <Button onPress={() => this.fecthItensOrder()}><Text>Ver itens</Text></Button>
+                                    <ScrollView style={{ marginLeft: 10, marginRight: 10 }}>
                                         {listItens.length > 0 &&
                                             listItens.map((data, index) =>
                                                 this.renderListItem(data, index),
                                             )}
-                                    </ScrollView> */}
+                                    </ScrollView>
                                 </View>
                             </View>
                         </Tab>
