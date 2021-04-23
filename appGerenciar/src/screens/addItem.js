@@ -54,7 +54,7 @@ class addItem extends Component {
     console.log(item)
 
     await this.setState({
-      valor: item.sale_price,//this.valorItem,
+      valor: item.sale_price,
       casasDecimaisQuantidade: 2,
       casasDecimaisPreco: 2,
       item: this.props.navigation.getParam('produto'),
@@ -161,10 +161,6 @@ class addItem extends Component {
 
       return this.props.navigation.navigate('novoPedido', {
         item: null,
-        //item: item,
-       //ou
-       // numero: numero,
-       /// pedido_id: pedido_id,
       });
     } catch (e) {
       console.log(e)

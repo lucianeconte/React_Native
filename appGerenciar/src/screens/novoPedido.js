@@ -42,6 +42,7 @@ class novoPedido extends Component {
             action: false,
             name: '',
             id_cliente: 0,
+            nameCliente: '',
             unit_measure: '',
             sale_price: '',
             purchase_price: '',
@@ -62,11 +63,19 @@ class novoPedido extends Component {
     //     );
     // }
 
+
     componentWillUnmount() {
         BackHandler.removeEventListener(
-            'hardwareBackPressNovoPeiddo',
+            'hardwareBackPressNovoPedido',
             this.onBackPress,
         );
+    }
+
+    componentDidUpdate() {
+        if (this.state.salesorder > 0) {
+            console.log('componentDidUpdate')
+            this.fecthItensOrder(); // ver outra forma, não é correto aqui, toda hora executa
+        }
     }
 
     onBackPress = () => {
@@ -289,8 +298,9 @@ class novoPedido extends Component {
         }
     };
 
-    confirmaCliente = (id) => {
+    confirmaCliente = (id, name) => {
         this.setState({ id_cliente: id });
+        this.setState({ nameCliente: name })
         this.setState({ listClientes: '' });
         Toast.show({
             position: 'top',
@@ -311,7 +321,7 @@ class novoPedido extends Component {
                     </Text>
                 </Body>
                 <Right>
-                    <Button onPress={() => this.confirmaCliente(item.id)}
+                    <Button onPress={() => this.confirmaCliente(item.id, item.name)}
                         style={{
                             alignSelf: 'flex-end',
                             paddingTop: 0,
@@ -487,8 +497,8 @@ class novoPedido extends Component {
                                     <View style={{ marginLeft: 10, marginRight: 10 }}>
                                         {listClientes.length > 0 && listClientes.map(this.renderClientes)}
                                     </View>
-                                    <Text>Cliente: {this.state.id_cliente}</Text>
                                     <Item stackedLabel>
+                                        <Label style={{ color: colors.blue2, fontWeight: 'bold', fontSize: 16 }}>{this.state.id_cliente > 0 ? this.state.nameCliente : ''}</Label>
                                         <Label style={{ color: colors.blue2 }}>Observações</Label>
                                         <Input
                                             placeholderTextColor={colors.gray}
@@ -559,7 +569,7 @@ class novoPedido extends Component {
                             tabStyle={{ backgroundColor: '#fff' }}>
                             <View padder>
                                 <View>
-                                    <Button onPress={() => this.fecthItensOrder()}><Text>Ver itens</Text></Button>
+                                    {/* <Button onPress={() => this.fecthItensOrder()}><Text>Ver itens</Text></Button> */}
                                     <ScrollView style={{ marginLeft: 10, marginRight: 10 }}>
                                         {listItens.length > 0 &&
                                             listItens.map((data, index) =>
@@ -572,17 +582,21 @@ class novoPedido extends Component {
                     </Tabs>
                 </Content>
                 <Footer style={{ backgroundColor: colors.white }}>
-                    <Button
-                        onPress={() => {
-                            this.salvar();
-                        }}
-                        block
-                        rounded
-                        style={{ backgroundColor: colors.blue2, width: 150 }}>
-                        <Text style={{ textTransform: 'capitalize', color: '#fff' }}>
-                            Criar pedido
-            </Text>
-                    </Button>
+                    {this.state.salesorder == 0 ?
+                        <Button
+                            onPress={() => {
+                                this.salvar();
+                            }}
+                            block
+                            rounded
+                            style={{ backgroundColor: colors.blue2, width: 150 }}>
+                            <Text style={{ textTransform: 'capitalize', color: '#fff' }}>
+                                Criar pedido
+                        </Text>
+                        </Button>
+                        :
+                        <Text style={{ color: colors.gray, marginLeft: -170, marginTop: 12 }}>{this.state.listItens.length} Iten(s) Lançado(s)</Text>
+                    }
                 </Footer>
             </Container>
         );
