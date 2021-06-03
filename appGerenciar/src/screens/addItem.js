@@ -26,7 +26,6 @@ import utils from '../services/utils';
 import { BackHandler } from 'react-native';
 import session from '../session';
 import { color } from 'react-native-reanimated';
-import novoPedido from './novoPedido';
 import { addProcut } from '../services/Vendas'
 
 class addItem extends Component {
@@ -75,6 +74,7 @@ class addItem extends Component {
       item: null,
       indice: null,
     });
+    //this.props.navigation.navigate('Home', {tipo: 'V'});   
   };
 
   removeItem = async () => {

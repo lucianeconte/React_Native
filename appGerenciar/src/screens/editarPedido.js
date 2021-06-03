@@ -25,7 +25,6 @@ import {
 import { ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colors from './colors';
-//import Spinner from 'react-native-loading-spinner-overlay';
 import { BackHandler, StatusBar, Touchable } from 'react-native';
 import utils from '../services/utils';
 import session from '../session';
@@ -34,7 +33,7 @@ import { server, showError, showSuccess } from '../common';
 import axios from 'axios';
 import { createPedido, itensOrder } from '../services/Vendas';
 
-class novoPedido extends Component {
+class editarPedido extends Component {
     constructor(properties) {
         super(properties);
         this.state = {
@@ -42,27 +41,25 @@ class novoPedido extends Component {
             action: false,
             name: '',
             id_cliente: 0,
-            nameCliente: '',
+            nameCliente: this.props.navigation.getParam('nameCliente'),
             unit_measure: '',
             sale_price: '',
             purchase_price: '',
             quantity: '',
-            notes: '',
+            notes: this.props.navigation.getParam('notes'),
             listProduct: [],
             listClientes: [],
             listItens: [],
-            salesorder: 0,
+            salesorder: this.props.navigation.getParam('salesorder'),
             company: 0,
         };
     }
 
-    // async componentDidMount() {
-    //     BackHandler.addEventListener(
-    //         'hardwareBackPressNovoParceiro',
-    //         this.onBackPress,
-    //     );
-    // }
-
+    componentDidMount() {
+        console.log('editar')
+        this.fecthItensOrder();
+        console.log('depios')
+    }
 
     componentWillUnmount() {
         BackHandler.removeEventListener(
@@ -79,30 +76,8 @@ class novoPedido extends Component {
     }
 
     onBackPress = () => {
-        // var BUTTONS = ['Não', 'Sim'];
-        // var DESTRUCTIVE_INDEX = 1;
-        // var CANCEL_INDEX = 1;
-
-        // ActionSheet.show(
-        //     {
-        //         options: BUTTONS,
-        //         cancelButtonIndex: CANCEL_INDEX,
-        //         destructiveButtonIndex: DESTRUCTIVE_INDEX,
-        //         title: 'Deseja sair sem salvar as alterações?',
-        //     },
-        //     buttonIndex => {
-        //         if (buttonIndex == 1) {
-        console.log('voltar')
         this.setState({ listProduct: [],  listItens: [], salesorder: 0, id_cliente: 0 });
         return this.props.navigation.navigate('Home', {tipo: 'V'}); //verificar se lançou itens, informar
-        //         }
-        //     },
-        // );
-
-        // if (this.props.navigation && this.props.navigation.goBack) {
-        //     return true;
-        // }
-        // return false;
     };
 
     handleCliente = async valor => {
@@ -451,7 +426,7 @@ class novoPedido extends Component {
                         </Button>
                     </Left>
                     <Body style={{ flex: 3 }}>
-                        <Title style={{ color: colors.blue2 }}>Novo Pedido</Title>
+                        <Title style={{ color: colors.blue2 }}>Editar Pedido {this.state.salesorder}</Title>
                     </Body>
                     <Right />
                 </Header>
@@ -475,49 +450,9 @@ class novoPedido extends Component {
                                             onChangeText={this.handleCliente}
                                         />
                                     </Item> */}
-                                    <View>
-                                        <Item
-                                            rounded
-                                            style={{ margin: 10, left: 5, backgroundColor: '#fff' }}>
-                                            <Input
-                                                autoFocus
-                                                placeholder="Buscar clientes..."
-                                                placeholderTextColor={colors.blue}
-                                                onChangeText={this.handleSearchProductChange}
-                                                onSubmitEditing={() => this.fecthClientes()}
-                                                value={this.state.searchTextCliente}
-                                                style={{
-                                                    height: 40,
-                                                    fontSize: 16,
-                                                }}
-                                            />
-                                            <Button
-                                                transparent
-                                                onPress={() => {
-                                                    this.fecthClientes();
-                                                }}>
-                                                <Icon
-                                                    name="search"
-                                                    style={{ fontWeight: 'bold', color: colors.blue2, fontSize: 24, marginRight: 16 }}
-                                                />
-                                            </Button>
-                                            <Button
-                                                transparent
-                                                onPress={() => {
-                                                    this.resetSearch('Pa');
-                                                }}>
-                                                <Icon
-                                                    name="close"
-                                                    style={{ fontWeight: 'bold', color: colors.blue2, fontSize: 24, marginRight: 8 }}
-                                                />
-                                            </Button>
-                                        </Item>
-                                    </View>
-                                    <View style={{ marginLeft: 10, marginRight: 10 }}>
-                                        {listClientes.length > 0 && listClientes.map(this.renderClientes)}
-                                    </View>
                                     <Item stackedLabel>
-                                        <Label style={{ color: colors.blue2, fontWeight: 'bold', fontSize: 16 }}>{this.state.id_cliente > 0 ? this.state.nameCliente : ''}</Label>
+                                        <Label style={{ color: colors.blue2 }}>Cliente</Label>
+                                        <Label style={{ color: colors.gray }}>{this.state.nameCliente}</Label>
                                         <Label style={{ color: colors.blue2 }}>Observações</Label>
                                         <Input
                                             placeholderTextColor={colors.gray}
@@ -621,4 +556,4 @@ class novoPedido extends Component {
     }
 }
 
-export default novoPedido;
+export default editarPedido;

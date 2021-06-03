@@ -36,6 +36,7 @@ import {
 
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import IconA from 'react-native-vector-icons/AntDesign'
+import { timing } from 'react-native-reanimated';
 
 class Home extends Component {
     constructor(props) {
@@ -61,7 +62,7 @@ class Home extends Component {
 
     componentDidMount() {
         const { navigation } = this.props;
-        console.log('componentDidMount')
+        console.log('componentDidMount HOME')
 
         var tipoMenu = this.props.navigation.getParam('tipo');
         console.log(tipoMenu)
@@ -70,6 +71,9 @@ class Home extends Component {
             this.setState({ tipo: tipoMenu });
             if (tipoMenu == 'P') {
                 this.fecthProduct();
+            }
+            if (tipoMenu == 'V') {
+                this.fecthPedidos();
             }
         }
 
@@ -266,7 +270,6 @@ class Home extends Component {
                     headers: headers
                 });
 
-                console.log(res.data)
                 await this.setState({
                     listPedidos: res.data
                 });
@@ -609,8 +612,8 @@ class Home extends Component {
                         </Text>
                     </Body>
                     <Right>
-                        <Button onPress={() => this.props.navigation.navigate('detalhesPedido', {
-                            pedido: item,
+                        <Button onPress={() => this.props.navigation.navigate('editarPedido', {
+                            salesorder: item.number, nameCliente: item.customer_name, notes: item.notes, 
                         })}
                             style={{
                                 alignSelf: 'flex-end',
@@ -712,7 +715,7 @@ class Home extends Component {
                     </Body>
                     <Right></Right>
                 </Header>
-                <Content style={{ backgroundColor: '#F5F3F2' }} >
+                
                     <View style={{ backgroundColor: colors.blue }}>
                         <ViewNavigator>
                             <NavigatorContent>
@@ -819,6 +822,7 @@ class Home extends Component {
                             </NavigatorContent>
                         </ViewNavigator>
                     </View>
+                    <Content style={{ backgroundColor: '#F5F3F2' }} >
                     <View>
                         {tipo === 'Pa' && (
                             <View>

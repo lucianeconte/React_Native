@@ -9,6 +9,7 @@ import novoParceiro from './screens/novoParceiro';
 import novoProduto from './screens/novoProduto';
 import novoPedido from './screens/novoPedido';
 import addItem from './screens/addItem';
+import editarPedido from './screens/editarPedido';
 
 const DrawerRoutes = createDrawerNavigator(
   {
@@ -66,6 +67,12 @@ export const SignedOutRoutes = createStackNavigator({
   },
   addItem: {
     screen: addItem,
+    navigationOptions: {
+      header: null,
+    },
+  },
+  editarPedido: {
+    screen: editarPedido,
     navigationOptions: {
       header: null,
     },

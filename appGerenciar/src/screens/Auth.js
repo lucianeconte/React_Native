@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: commonStyles.fontFamily,
         color: colors.blue2,
-        fontSize: 70,
+        fontSize: 60,
         marginBottom: 10
     },
     subtitle: {
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     formContainer: {
-        backgroundColor: colors.blue,
+        backgroundColor: colors.blue3,
         padding: 20,
         width: '90%',
         borderRadius: 20,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         padding: 10,
         alignItems: 'center',
-        borderRadius: 7
+        borderRadius: 10
     },
     buttonText: {
         fontFamily: commonStyles.fontFamily,
